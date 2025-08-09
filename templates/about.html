@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>About me</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <nav>
+        <a href="/">Home</a> | <a href="/about">About me</a>
+    </nav>
+
+    <h1>About Me</h1>
+    <div class="about-box">
+    <div class="about-container">
+        
+        <div class="profile">
+            <img src="{{ url_for('static', filename='photo_2024-12-07_15-38-32.jpg') }}" 
+                 alt="My Photo" class="profile-pic">
+            <p class="name">Aliyah</p>
+        </div>
+
+        
+        <div class="bio">
+            <p>
+                Hi! My name is Aliyah, and this is my to-do list app.
+    
+            </p>
+        </div>
+    </div>
+</body>
+</html>

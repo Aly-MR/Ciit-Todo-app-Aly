@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>To Do List</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+
+<body>
+     <nav> 
+        <a href="/">Home</a>  | <a href="/about">About me </a>
+      </nav>
+<header> 
+    <h1>To Do List</h1> 
+</header>
+
+<form method="POST">
+    <input type="text" name="task" id="new-task" placeholder="Enter a task" required>
+    <button type="submit">Submit</button>
+</form>
+
+<ul id=todo-list>
+    {% for task in tasks %}
+        <li>
+            {% if loop.index0 == edit_index %}
+        <form method="POST" action="/update" class="edit-form" style="width: 100%; display: flex; justify-content: space-between;">
+          <input type="hidden" name="task_id" value="{{ loop.index0 }}">
+          <input type="text" name="updated_task" value="{{ task }}" required style="flex: 1; padding: 6px;">
+          <button type="submit" class="edit-btn">Save</button>
+</form>
+            {% else %}
+                <span>{{ task }}</span>
+                <div class="buttons">
+                    <form method="GET" action="/edit/{{ loop.index0 }}" style="display: inline;">
+                        <button type="submit" class="edit-btn">Edit</button>
+                    </form>
+                    <form method="POST" action="/delete" style="display: inline;">
+                        <input type="hidden" name="task_to_delete" value="{{ task }}">
+                        <button type="submit" class="delete-btn">Delete</button>
+                    </form>
+                </div>
+            {% endif %}
+        </li>
+    {% endfor %}
+</ul>
+ <script>
+document.addEventListener('DOMContentLoaded', function() {
+    const list = document.getElementById('todo-list');
+    
+    if (!list) return;
+
+    list.addEventListener('click', function(e) {
+        if (e.target.closest('button') || e.target.closest('form')) return;
+
+        const li = e.target.closest('li');
+        if (!li) return;
+
+        li.classList.toggle('done'); 
+    });
+});
+</script>
+
+</body>
+</html>
