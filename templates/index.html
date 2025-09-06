@@ -4,60 +4,120 @@
     <title>To Do List</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
 </head>
-
 <body>
-     <nav> 
-        <a href="/">Home</a>  | <a href="/about">About me </a>
-      </nav>
-<header> 
-    <h1>To Do List</h1> 
-</header>
+    <!-- Navigation Tabs -->
+    <nav>
+        <a href="{{ url_for('home') }}" class="{% if request.endpoint == 'home' %}active{% endif %}">HOME</a>
+        <a href="{{ url_for('about') }}" class="{% if request.endpoint == 'about' %}active{% endif %}">ABOUT</a>
+    </nav>
 
-<form method="POST">
-    <input type="text" name="task" id="new-task" placeholder="Enter a task" required>
-    <button type="submit">Submit</button>
-</form>
+    <!-- Main To-Do Container -->
+    <div class="container">
+        <header>
+            <h1>TO DO LIST</h1>
+        </header>
 
-<ul id=todo-list>
-    {% for task in tasks %}
-        <li>
-            {% if loop.index0 == edit_index %}
-        <form method="POST" action="/update" class="edit-form" style="width: 100%; display: flex; justify-content: space-between;">
-          <input type="hidden" name="task_id" value="{{ loop.index0 }}">
-          <input type="text" name="updated_task" value="{{ task }}" required style="flex: 1; padding: 6px;">
-          <button type="submit" class="edit-btn">Save</button>
-</form>
-            {% else %}
-                <span>{{ task }}</span>
-                <div class="buttons">
-                    <form method="GET" action="/edit/{{ loop.index0 }}" style="display: inline;">
-                        <button type="submit" class="edit-btn">Edit</button>
+        <!-- Add new task -->
+        <form method="POST" action="{{ url_for('home') }}" class="add-task">
+            <input type="text" name="task" id="new-task" placeholder="Enter a task" required>
+            <button type="submit">Add</button>
+        </form>
+
+        <!-- Upload + Download -->
+        <div style="text-align:center; margin-bottom:20px;">
+            <form method="POST" action="{{ url_for('upload_csv') }}" enctype="multipart/form-data" style="margin-bottom:10px;">
+                <input type="file" name="csv_file" accept=".csv" required/>
+                <button>Upload CSV</button>
+            </form>
+
+            <a href="{{ url_for('download_csv') }}">
+                <button>📥 Download Tasks</button>
+            </a>
+        </div>
+
+        <!-- Task list -->
+        <ul id="todo-list">
+            {% for task in tasks %}
+                <li data-id="{{ task.id }}" data-toggle-url="{{ url_for('toggle_task', id=task.id) }}">
+                    <!-- Checkbox -->
+                    <input type="checkbox" {% if task.done %}checked{% endif %}>
+
+                    <!-- Task text -->
+                    <span class="task-text {% if task.done %}done{% endif %}">{{ task.task }}</span>
+
+                    <!-- Edit form (hidden by default) -->
+                    <form method="POST" action="{{ url_for('edit_task', id=task.id) }}" class="edit-form" style="display:none; flex:1; gap:8px;">
+                        <input type="text" name="new_task" value="{{ task.task }}" required style="flex:1;">
+                        <button type="submit">Save</button>
+                        <button type="button" class="cancel-edit">Cancel</button>
                     </form>
-                    <form method="POST" action="/delete" style="display: inline;">
-                        <input type="hidden" name="task_to_delete" value="{{ task }}">
-                        <button type="submit" class="delete-btn">Delete</button>
-                    </form>
-                </div>
-            {% endif %}
-        </li>
-    {% endfor %}
-</ul>
- <script>
-document.addEventListener('DOMContentLoaded', function() {
-    const list = document.getElementById('todo-list');
-    
-    if (!list) return;
 
-    list.addEventListener('click', function(e) {
-        if (e.target.closest('button') || e.target.closest('form')) return;
+                    <!-- Buttons -->
+                    <div class="buttons" style="margin-left:auto; display:flex; gap:6px;">
+                        <button type="button" class="edit-toggle">Edit</button>
+                        <form method="POST" action="{{ url_for('delete_task', id=task.id) }}" style="display:inline;">
+                            <button type="submit" class="delete-btn">Delete</button>
+                        </form>
+                    </div>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
 
-        const li = e.target.closest('li');
-        if (!li) return;
+    <!-- Script for toggle + edit -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const editButtons = document.querySelectorAll(".edit-toggle");
+            const cancelButtons = document.querySelectorAll(".cancel-edit");
+            const list = document.getElementById('todo-list');
 
-        li.classList.toggle('done'); 
-    });
+            // Toggle edit form
+            editButtons.forEach(button => {
+                button.addEventListener("click", function () {
+                    const li = button.closest("li");
+                    const form = li.querySelector(".edit-form");
+                    const taskText = li.querySelector(".task-text");
+
+                    taskText.style.display = "none";
+                    form.style.display = "flex";
+                    button.style.display = "none";
+                });
+            });
+
+            // Cancel edit
+            cancelButtons.forEach(button => {
+                button.addEventListener("click", function () {
+                    const li = button.closest("li");
+                    const form = li.querySelector(".edit-form");
+                    const taskText = li.querySelector(".task-text");
+                    const editToggle = li.querySelector(".edit-toggle");
+
+                    taskText.style.display = "inline";
+                    form.style.display = "none";
+                    editToggle.style.display = "inline";
+                });
+            });
+
+            // Toggle done state
+if (list) {
+        list.querySelectorAll("input[type=checkbox]").forEach(checkbox => {
+            checkbox.addEventListener("change", function () {
+                const li = this.closest("li");
+                const url = li.dataset.toggleUrl;
+
+                if (this.checked) {
+                    li.classList.add("done");
+                } else {
+                    li.classList.remove("done");
+                }
+
+                if (url) {
+                    fetch(url, { method: "POST" });
+                }
+            });
+        });
+    }
 });
 </script>
-
 </body>
 </html>

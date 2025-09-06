@@ -1,160 +1,144 @@
+/* Reset */
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family: Arial, sans-serif;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
 body {
-    background-color: rgb(160, 160, 160);
+    background-color: #111;
+    color: #eee;
     padding: 20px;
 }
 
-form {
-    display: flex;
-    justify-content: center;
-    gap: 10px; 
-}
-
-input[type="text"] {
-    padding: 8px;
-    width: 250px;
-    border-radius: 4px;
-    border: 1px solid #ccc;
-}
-
-button[type="submit"] {
-    padding: 8px 12px;
-    border: none;
-    border-radius: 4px;
-    background-color: #007bff;
-    color: white;
-    cursor: pointer;
-}
-
-header {
-    text-align: center;
-    margin-bottom: 30px;
-}
-
-h1 {
-    font-family: 'Times New Roman', Times, serif;
-    font-size: 2.5rem;
-}
-
-li {
-    background-color: #fff;
-    border: 1px solid #ddd;
-    padding: 10px 20px;
-    margin-bottom: 5px;
-    border-radius: 8px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-div {
-    text-align: center;
-    margin-bottom: 20px;
-}
-
-button.delete-btn[type="submit"] {
-    background-color: red !important;
-    color: white;
-    border: none;
-    padding: 6px 12px;
-    border-radius: 4px;
-    cursor: pointer;
-    transition: background-color 0.3s;
-}
-
-
-.edit-btn {
-    background-color: rgb(0, 255, 55);
-    color: black;
-    padding: 6px 12px;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-}
-
-#todo-list {
-    cursor: pointer;
-}
- 
-#todo-list li.done span{
-    text-decoration: line-through;
-    color: gray;
-}
-
-.about-box {
-    background-color: rgb(214, 214, 214);
-    border: 2px solid #ccc;
-    border-radius: 10px;
-    padding: 20px;
-    max-width: 800px;
-    margin: 30px auto; 
-
-}
-.about-container {
-    display: flex;
-    align-items: flex-start; 
-    gap: 20px;
-    margin-top: 30px;
-}
-
-
-.profile {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-
-
-.profile-pic {
-    width: 200px;
-    height: auto;
-    border: 4px solid #555;
-    border-radius: 8px;
-    padding: 4px;
-}
-
-
-.name {
-    margin-top: 8px;
-    font-weight: bold;
-    font-size: 1.2rem;
-    text-align: center;
-}
-
-
-.bio {
-    flex: 1;
-    font-size: 1rem;
-    line-height: 1.6;
-}
-
+/* Navigation Tabs */
 nav {
-    background-color: #5f5f5f; 
-    padding: 15px;
     display: flex;
     justify-content: center;
-    gap: 15px;
-    position: sticky; 
-    top: 0;
-    z-index: 1000;
+    gap: 40px;
+    margin-bottom: 30px;
+    border-bottom: 1px solid #333;
 }
 
 nav a {
-    color: white;
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #aaa;
     text-decoration: none;
-    padding: 8px 16px;
-    border: 2px solid white;
-    border-radius: 4px;
-    transition: background-color 0.3s, color 0.3s;
+    padding-bottom: 8px;
+    transition: color 0.3s;
 }
 
 nav a:hover {
-    background-color: white;
-    color: #333;
+    color: #4da6ff;
+}
+
+nav a.active {
+    color: #4da6ff;
+    border-bottom: 3px solid #4da6ff;
+}
+
+/* Main card */
+.container {
+    max-width: 600px;
+    margin: 0 auto;
+    background: #1a1a1a;
+    padding: 30px;
+    border-radius: 16px;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.6);
+}
+
+header h1 {
+    text-align: center;
+    margin-bottom: 20px;
+    font-size: 2rem;
+    color: #f5f5f5;
+}
+
+/* Task input form */
+form.add-task {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+    gap: 10px;
+}
+
+input[type="text"] {
+    flex: 1;
+    padding: 10px;
+    background: #111;
+    color: #eee;
+    border: 1px solid #333;
+    border-radius: 8px;
+}
+
+button {
+    background: #4da6ff;
+    border: none;
+    padding: 10px 16px;
+    border-radius: 8px;
+    color: #fff;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+button:hover {
+    background: #1a82ff;
+}
+
+/* Task list */
+#todo-list {
+    list-style: none;
+    margin-top: 20px;
+}
+
+#todo-list li {
+    display: flex;
+    align-items: center;
+    padding: 12px;
+    border-bottom: 1px solid #333;
+    gap: 12px;
+    color: #ddd;
+}
+
+#todo-list li:last-child {
+    border-bottom: none;
+}
+
+#todo-list li span.task-text {
+    flex: 1;
+}
+
+#todo-list li.done span {
+    text-decoration: line-through;
+    color: #555;
+}
+
+input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+    accent-color: #4da6ff;
+    cursor: pointer;
+}
+
+/* About page box */
+.about-box {
+    background: #1a1a1a;
+    border-radius: 16px;
+    padding: 30px;
+    max-width: 700px;
+    margin: 0 auto;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.6);
+}
+
+.about-container {
+    display: flex;
+    gap: 20px;
+}
+
+.profile-pic {
+    width: 180px;
+    border-radius: 12px;
+    border: 3px solid #4da6ff;
 }
